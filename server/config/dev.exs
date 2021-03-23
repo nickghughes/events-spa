@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :event_app, EventApp.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "event_app_dev",
+config :event_server, EventServer.Repo,
+  username: "events",
+  password: "iy3ohd2Wie7i",
+  database: "event_server_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :event_app, EventApp.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :event_app, EventAppWeb.Endpoint,
+config :event_server, EventServerWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -47,13 +47,13 @@ config :event_app, EventAppWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :event_app, EventAppWeb.Endpoint,
+config :event_server, EventServerWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/event_app_web/(live|views)/.*(ex)$",
-      ~r"lib/event_app_web/templates/.*(eex)$"
+      ~r"lib/event_server_web/(live|views)/.*(ex)$",
+      ~r"lib/event_server_web/templates/.*(eex)$"
     ]
   ]
 

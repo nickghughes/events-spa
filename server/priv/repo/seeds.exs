@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     EventApp.Repo.insert!(%EventApp.SomeSchema{})
+#     EventServer.Repo.insert!(%EventServer.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
