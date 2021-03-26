@@ -1,7 +1,7 @@
 import { Button, Form } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import DateTimePicker from 'react-datetime-picker';
-import { update_event, fetch_event, fetch_events } from '../api';
+import { update_event, fetch_event, fetch_events, dispatch_banners } from '../api';
 import store from '../store';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -18,16 +18,17 @@ function EventsEdit({ event }) {
         setTitle(state?.event?.title);
         setDescription(state?.event?.description);
         setDate(new Date(state?.event?.date));
-      }).catch(() => {
+      }).catch((data) => {
         fetch_events();
         history.push("/");
+        dispatch_banners(data);
       });
     }
   })
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date());
   const [fetched, setFetched] = useState(false);
 
   function onSubmit(ev) {
@@ -35,9 +36,10 @@ function EventsEdit({ event }) {
     let offsetDate = new Date(date);
     offsetDate.setMinutes(date.getMinutes() - date.getTimezoneOffset());
     let data = Object.assign({}, event, { title, description, date: offsetDate });
-    update_event(data).then(() => {
+    update_event(data).then((data) => {
       fetch_events();
       history.push("/");
+      dispatch_banners(data);
     })
   }
 

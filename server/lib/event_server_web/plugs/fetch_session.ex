@@ -7,7 +7,6 @@ defmodule EventServerWeb.Plugs.FetchSession do
 
   def call(conn, _args) do
     token = Enum.at(get_req_header(conn, "x-auth"), 0)
-    IO.inspect token
     user = case Phoenix.Token.verify(conn, "user_id", token, max_age: 86400) do
       {:ok, user_id} ->
         EventServer.Users.get_user(user_id)

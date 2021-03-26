@@ -70,7 +70,6 @@ defmodule EventServerWeb.EventController do
 
   def index(conn, _params) do
     events = if logged_in?(conn), do: Events.events_for(conn.assigns[:current_user]), else: []
-    IO.inspect events
     render(conn, "index.json", events: events)
   end
 

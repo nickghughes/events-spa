@@ -8,13 +8,13 @@ import EventsNew from './components/EventsNew';
 import EventsShow from './components/EventsShow';
 import EventsEdit from './components/EventsEdit';
 
-import { fetch_events } from './api'
+import store from './store'
 
 function App({ history }) {
   history.listen((location, action) => {
-    if (location.pathname === "/") {
-      fetch_events();
-    }
+    store.dispatch({
+      type: 'banners/clear'
+    })
   })
 
   return (

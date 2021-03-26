@@ -21,7 +21,7 @@ defmodule EventServerWeb.CommentController do
 
   # Redirect back to events index if user isn't the owner or an invitee
   def require_event_owner_or_invitee(conn, _args) do
-    event = Events.get_event! conn.assigns[:comment]["event_id"]
+    event = Events.get_event! conn.params["comment"]["event_id"]
     if logged_in?(conn) and (conn.assigns[:current_user].id == event.user_id or conn.assigns[:current_user].email in Enum.map(event.invites, fn x -> x.email end)) do
       conn
     else

@@ -60,7 +60,9 @@ function event(state = null, action) {
 function error(state = null, action) {
   switch (action.type) {
     case 'error/set':
-      return action.data || null;
+      return action.data;
+    case 'banners/clear', 'session/clear':
+      return null;
     default:
       return state;
   }
@@ -69,9 +71,11 @@ function error(state = null, action) {
 function info(state = null, action) {
   switch (action.type) {
     case 'info/set':
-      return action.data || null;
+      return action.data;
     case 'session/clear':
       return "Logged out.";
+    case 'banners/clear':
+      return null;
     default:
       return state;
   }
@@ -80,7 +84,9 @@ function info(state = null, action) {
 function success(state = null, action) {
   switch (action.type) {
     case 'success/set':
-      return action.data || null;
+      return action.data;
+    case 'banners/clear', 'session/clear':
+      return null;
     default:
       return state;
   }

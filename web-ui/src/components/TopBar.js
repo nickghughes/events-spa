@@ -5,7 +5,10 @@ import { connect } from 'react-redux'
 import { api_login } from '../api'
 
 let LoggedIn = connect()(({session, dispatch}) => {
+  let history = useHistory();
+
   function logout() {
+    history.push("/");
     dispatch({type: 'session/clear'});
   }
 
@@ -22,7 +25,7 @@ let LoggedIn = connect()(({session, dispatch}) => {
 
 function LoginOrRegister() {
   let history = useHistory();
-  
+
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
 
@@ -33,6 +36,10 @@ function LoginOrRegister() {
         history.push(history.location.state.redirect);
       }
     });
+  }
+
+  function register() {
+    history.push("/register");
   }
 
   return (
@@ -49,7 +56,7 @@ function LoginOrRegister() {
         </Form>
       </Col>
       <Col md={{ offset: 2, span: 2 }} className="text-right">
-        <Link to="/register" className="nav-link">Register</Link>
+        <Button variant="link" onClick={register}>Register</Button>
       </Col>
     </Row>
   );

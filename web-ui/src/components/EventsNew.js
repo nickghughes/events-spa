@@ -1,7 +1,7 @@
 import { Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import DateTimePicker from 'react-datetime-picker';
-import { create_event, fetch_events } from '../api';
+import { create_event, dispatch_banners, fetch_events } from '../api';
 import { useHistory } from 'react-router-dom';
 
 function EventsNew() {
@@ -18,9 +18,10 @@ function EventsNew() {
     let data = {
       title, description, date: offsetDate
     };
-    create_event(data).then(() => {
+    create_event(data).then((data) => {
       fetch_events();
       history.push("/");
+      dispatch_banners(data);
     })
   }
 

@@ -18,7 +18,6 @@ defmodule EventServer.Users.User do
 
   @doc false
   def changeset(user, attrs) do
-  IO.inspect attrs
     user
     |> cast(attrs, [:name, :email])
     |> add_password_hash(attrs["password"])

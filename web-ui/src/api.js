@@ -11,20 +11,25 @@ function tokenHeader() {
   }
 }
 
-// TODO Fix banner logic, wait until all use cases are met though
-function dispatch_banners(data) {
-  store.dispatch({
-    type: 'error/set',
-    data: data.error
-  });
-  store.dispatch({
-    type: 'info/set',
-    data: data.info
-  });
-  store.dispatch({
-    type: 'success/set',
-    data: data.success
-  });
+export function dispatch_banners(data) {
+  if (data.error) {
+    store.dispatch({
+      type: 'error/set',
+      data: data.error
+    });
+  }
+  if (data.info) {
+    store.dispatch({
+      type: 'info/set',
+      data: data.info
+    });
+  }
+  if (data.success) {
+    store.dispatch({
+      type: 'success/set',
+      data: data.success
+    });
+  }
 }
 
 async function api_get(path) {
@@ -34,7 +39,7 @@ async function api_get(path) {
     });
   let resp = await text.json();
   dispatch_banners(resp);
-  return resp.data;
+  return resp;
 }
 
 async function api_post(path, data) {
@@ -87,6 +92,7 @@ export function api_login(email, password) {
       store.dispatch(action);
       fetch_events();
     }
+    return data;
   });
 }
 
@@ -99,16 +105,18 @@ export function register(user) {
       }
       store.dispatch(action);
     }
+    return data;
   });
 }
 
 export function fetch_events() {
-  return api_get("/events").then((data) => {
+  return api_get("/events").then((resp) => {
     let action = {
       type: 'events/set',
-      data: data
+      data: resp.data
     }
     store.dispatch(action);
+    return resp;
   })
 }
 
@@ -120,12 +128,15 @@ export function update_event(event) {
 }
 
 export function fetch_event(eventId) {
-  return api_get(`/events/${eventId}`).then((data) => {
-    let action = {
-      type: 'event/set',
-      data: data
+  return api_get(`/events/${eventId}`).then((resp) => {
+    if (resp.data) {
+      let action = {
+        type: 'event/set',
+        data: resp.data
+      }
+      store.dispatch(action);
     }
-    store.dispatch(action);
+    return resp;
   })
 }
 
@@ -149,6 +160,7 @@ export function create_comment(eventId, body) {
       data: event1
     }
     store.dispatch(action);
+    return data;
   })
 }
 

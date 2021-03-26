@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { Row, Col, Button, Card, Form, InputGroup, Table } from 'react-bootstrap';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { update_invite, send_invite, create_comment, delete_comment, fetch_event } from '../api';
+import { update_invite, send_invite, create_comment, delete_comment, fetch_event, dispatch_banners } from '../api';
 
 function Comment({comment, userId, ownerId}) {
 
@@ -174,17 +174,28 @@ function EventsShow({session, event}) {
   useEffect(() => {
     if (!fetched) {
       setFetched(true);
-      fetch_event(id).catch(() => {
-        history.push({
-          pathname: "/register",
-          state: { redirect: `/events/${id}` }
-        });
+      fetch_event(id).then((data) => {
+        if (!data.data) {
+          if (session) {
+            history.push("/");
+          } else {
+            history.push({
+              pathname: "/register",
+              state: { redirect: `/events/${id}` }
+            });
+          }
+          dispatch_banners(data);
+        }
       });
     }
   });
 
+  function editEvent() {
+    history.push(`/events/${event.id}/edit`)
+  }
+
   return (
-    fetched && event ?
+    fetched && event && session ?
     <Row className="mb-5">
       <Col lg={{offset: 1, span: 7}}>
         <Card>
@@ -202,7 +213,7 @@ function EventsShow({session, event}) {
           </Card.Text>
           {session.user_id === event.user.id &&
             <Col xs={6} className="text-right my-3 mx-auto">
-              <Link to={`/events/${event.id}/edit`} className="btn btn-block btn-secondary">Edit</Link>
+              <Button variant="secondary" onClick={editEvent} className="btn-block">Edit</Button>
             </Col>
           }
           {event.comments.map((comment) => 

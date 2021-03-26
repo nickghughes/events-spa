@@ -42,7 +42,6 @@ defmodule EventServer.Users do
 
   def authenticate(email, pass) do
     user = Repo.get_by(User, email: email)
-    IO.inspect ["User found", user]
     if user do
       case Argon2.check_pass(user, pass) do
         {:ok, user} -> user

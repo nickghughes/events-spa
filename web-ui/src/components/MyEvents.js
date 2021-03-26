@@ -1,10 +1,20 @@
 import { Row, Col, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetch_event } from '../api';
+import { fetch_events } from '../api';
 import { useHistory } from 'react-router-dom';
 
 function Event({event, userId}) {
+  let history = useHistory();
+
+  function showEvent() {
+    history.push(`/events/${event.id}`);
+  }
+
+  function editEvent() {
+    history.push(`/events/${event.id}/edit`);
+  }
+
   return (
     <Col xl={3} className="my-2">
       <Card>
@@ -17,11 +27,11 @@ function Event({event, userId}) {
           <Card.Text className="text-center my-2"><small>{event.description}</small></Card.Text>
           <Row>
             <Col xs={7} className="text-center mx-auto">
-              <Link to={`/events/${event.id}`} className="btn btn-block btn-info">View</Link>
+              <Button variant="info" onClick={showEvent} className="btn-block">View</Button>
             </Col>
             {userId === event.user.id &&
               <Col xs={5} className="text-center">
-                <Link to={`/events/${event.id}/edit`} className="btn btn-block btn-secondary">Edit</Link>
+                <Button variant="secondary" onClick={editEvent} className="btn-block">Edit</Button>
               </Col>
             }
           </Row>
@@ -34,6 +44,10 @@ function Event({event, userId}) {
 function MyEvents({events, session}) {
   let history = useHistory();
 
+  function refresh() {
+    fetch_events();
+  }
+
   function newEvent() {
     history.push("/events/new");
   }
@@ -44,6 +58,7 @@ function MyEvents({events, session}) {
         <Col><h1>My Events</h1></Col>
         {session &&
           <Col className="text-right">
+            <Button variant="info" onClick={refresh} className="mx-3">⟳</Button>
             <Button variant="primary" onClick={newEvent}>New Event</Button>
           </Col>
         }
