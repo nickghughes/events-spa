@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { Container } from 'react-bootstrap';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import TopBar from './components/TopBar';
+import MyEvents from './components/MyEvents';
+import Register from './components/Register';
+import EventsNew from './components/EventsNew';
+import EventsShow from './components/EventsShow';
+import EventsEdit from './components/EventsEdit';
 
-function App() {
+import { fetch_events } from './api'
+
+function App({ history }) {
+  history.listen((location, action) => {
+    if (location.pathname === "/") {
+      fetch_events();
+    }
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <TopBar />
+      <Switch>
+        <Route path="/" exact>
+          <MyEvents />
+        </Route>
+        <Route path="/register" exact>
+          <Register />
+        </Route>
+        <Route path="/events/new" exact>
+          <EventsNew />
+        </Route>
+        <Route path="/events/:id/edit">
+          <EventsEdit />
+        </Route>
+        <Route path="/events/:id">
+          <EventsShow />
+        </Route>
+      </Switch>
+    </Container>
   );
 }
 
-export default App;
+export default withRouter(App);

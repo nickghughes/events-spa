@@ -14,9 +14,14 @@ defmodule EventServerWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> put_resp_header("content-type", "application/json; charset=UTF-8")
+      |> send_resp(
+        :created,
+        Jason.encode!(%{
+          session: %{ user_id: user.id, name: user.name, token: Phoenix.Token.sign(conn, "user_id", user.id)},
+          success: "Registered Successfully. Welcome, #{user.name}!"
+        })
+      )
     end
   end
 

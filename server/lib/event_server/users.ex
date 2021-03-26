@@ -37,6 +37,22 @@ defmodule EventServer.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  # Get a user without raising if no results are found
+  def get_user(id), do: Repo.get(User, id)
+
+  def authenticate(email, pass) do
+    user = Repo.get_by(User, email: email)
+    IO.inspect ["User found", user]
+    if user do
+      case Argon2.check_pass(user, pass) do
+        {:ok, user} -> user
+        _ -> nil
+      end
+    else
+      nil
+    end
+  end
+
   @doc """
   Creates a user.
 
@@ -100,5 +116,10 @@ defmodule EventServer.Users do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  # Get multiple users with a list of emails
+  def get_users_by_emails(emails) do
+    Repo.all from u in User, where: u.email in ^emails
   end
 end

@@ -14,9 +14,13 @@ defmodule EventServerWeb.InviteController do
   def create(conn, %{"invite" => invite_params}) do
     with {:ok, %Invite{} = invite} <- Invites.create_invite(invite_params) do
       conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.invite_path(conn, :show, invite))
-      |> render("show.json", invite: invite)
+      |> put_resp_header(
+        "content-type",
+        "application/json; charset=UTF-8")
+      |> send_resp(
+        :created,
+        Jason.encode!(%{info: "Invite created successfully."})
+      )
     end
   end
 
@@ -29,7 +33,14 @@ defmodule EventServerWeb.InviteController do
     invite = Invites.get_invite!(id)
 
     with {:ok, %Invite{} = invite} <- Invites.update_invite(invite, invite_params) do
-      render(conn, "show.json", invite: invite)
+      conn
+      |> put_resp_header(
+        "content-type",
+        "application/json; charset=UTF-8")
+      |> send_resp(
+        :created,
+        Jason.encode!(%{info: "Invite updated successfully."})
+      )
     end
   end
 

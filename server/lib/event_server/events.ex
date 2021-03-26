@@ -7,6 +7,7 @@ defmodule EventServer.Events do
   alias EventServer.Repo
 
   alias EventServer.Events.Event
+  alias EventServer.Users.User
 
   @doc """
   Returns the list of events.
@@ -19,6 +20,7 @@ defmodule EventServer.Events do
   """
   def list_events do
     Repo.all(Event)
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -35,7 +37,10 @@ defmodule EventServer.Events do
       ** (Ecto.NoResultsError)
 
   """
-  def get_event!(id), do: Repo.get!(Event, id)
+  def get_event!(id) do
+    Repo.get!(Event, id)
+    |> Repo.preload [:user, [comments: :user], :invites]
+  end
 
   @doc """
   Creates a event.
@@ -100,5 +105,15 @@ defmodule EventServer.Events do
   """
   def change_event(%Event{} = event, attrs \\ %{}) do
     Event.changeset(event, attrs)
+  end
+
+  # Get all events that are visible to a given user
+  # Use a fragment because ecto's join query doesn't dedupe
+  def events_for(%User{} = user) do
+    Repo.all from e in Event,
+                where: (e.user_id == ^user.id or 
+                        fragment("EXISTS(SELECT 1 FROM invites WHERE invites.event_id = e0.id AND invites.email = ?)", ^"#{user.email}")),
+                order_by: e.date,
+                preload: :user
   end
 end

@@ -23,6 +23,7 @@ defmodule EventServerWeb do
 
       import Plug.Conn
       import EventServerWeb.Gettext
+      import EventAppWeb.Helpers
       alias EventServerWeb.Router.Helpers, as: Routes
     end
   end
@@ -68,6 +69,7 @@ defmodule EventServerWeb do
 
       import EventServerWeb.ErrorHelpers
       import EventServerWeb.Gettext
+      import EventAppWeb.Helpers
       alias EventServerWeb.Router.Helpers, as: Routes
     end
   end

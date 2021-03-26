@@ -101,4 +101,10 @@ defmodule EventServer.Invites do
   def change_invite(%Invite{} = invite, attrs \\ %{}) do
     Invite.changeset(invite, attrs)
   end
+
+  # Get the invite corresponding to an event and email
+  def get_by_event_id_and_email(event_id, email) do
+    Invite
+    |> Repo.get_by(event_id: event_id, email: email)
+  end
 end
