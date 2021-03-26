@@ -1,6 +1,6 @@
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
-import { register, fetch_events } from '../api';
+import { register, fetch_events, dispatch_banners } from '../api';
 import { useHistory } from 'react-router-dom';
 
 function Register() {
@@ -42,9 +42,10 @@ function Register() {
     let data = {
       email, name, password: pass1
     };
-    register(data).then(() => {
+    register(data).then((data) => {
       fetch_events();
       history.push(history.location.state?.redirect || "/");
+      dispatch_banners(data);
     })
   }
 
