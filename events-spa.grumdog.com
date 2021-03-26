@@ -9,7 +9,7 @@ server {
     }
 
     location / {
-        root /home/eventsspa/events-spa/web-ui/static;
+        root /home/eventsspa/events-spa/web-ui/build;
         index index.html;
         try_files $uri /index.html;	 
     }
