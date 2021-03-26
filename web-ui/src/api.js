@@ -79,7 +79,7 @@ async function api_delete(path) {
       'Content-Type': 'application/json'
     }, tokenHeader())
   };
-  await fetch("http://localhost:4000/api/v1" + path, opts);
+  await fetch(process.env.REACT_APP_API_URL + path, opts);
 }
 
 export function api_login(email, password) {
