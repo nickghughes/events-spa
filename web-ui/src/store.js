@@ -61,7 +61,9 @@ function error(state = null, action) {
   switch (action.type) {
     case 'error/set':
       return action.data;
-    case 'banners/clear', 'session/clear':
+    case 'banners/clear':
+      return null;
+    case 'session/clear':
       return null;
     default:
       return state;
@@ -85,7 +87,9 @@ function success(state = null, action) {
   switch (action.type) {
     case 'success/set':
       return action.data;
-    case 'banners/clear', 'session/clear':
+    case 'banners/clear':
+      return null;
+    case 'session/clear':
       return null;
     default:
       return state;
