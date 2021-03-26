@@ -34,7 +34,7 @@ export function dispatch_banners(data) {
 
 async function api_get(path) {
   let text = await fetch(
-    "http://localhost:4000/api/v1" + path, {
+    process.env.REACT_APP_API_URL + path, {
       headers: tokenHeader()
     });
   let resp = await text.json();
@@ -51,7 +51,7 @@ async function api_post(path, data) {
     body: JSON.stringify(data),
   };
   let text = await fetch(
-    "http://localhost:4000/api/v1" + path, opts);
+    process.env.REACT_APP_API_URL + path, opts);
   let resp = await text.json();
   dispatch_banners(resp);
   return resp;
@@ -66,7 +66,7 @@ async function api_patch(path, data) {
     body: JSON.stringify(data),
   };
   let text = await fetch(
-    "http://localhost:4000/api/v1" + path, opts);
+    process.env.REACT_APP_API_URL + path, opts);
   let resp = await text.json();
   dispatch_banners(resp);
   return resp;
