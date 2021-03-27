@@ -21,7 +21,7 @@ Yes
 
 
 5. Is your app properly deployed? If not, what went wrong?
-
+Yes
 
 
 
